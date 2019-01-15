@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Получение токенов из фонда наград VIZ: форма</title>
+    </head>
+<body>
+<h1>Заполните поля, чтобы отправить награду</h1>
+<form method="get" action="https://liveblogs.space/awards/">
+<p><label for="target">Кого наградить:</label></p>
+<p><input type="text" name="target" value=""></p>
+<p><label for="energy">Процент энергии, который вы готовы потратить при награде. Энергия регенерирует за сутки на 20%:</label></p>
+<p><input type="text" name="energy" id="awarding_energy" value="" onchange="localStorage.setItem('energy_percent', this.value)" ></p>
+<p><label for="custom_sequence">Номер Custom операции, отправленной пользователем, которому предназначена награда (в принципе, можно указать любое число, например, id новости, опубликованной пользователем, в базе данных вашего сайта):</label></p>
+<p><input type="text" name="custom_sequence" value=""></p>
+<p><label for="memo">Заметка (memo):</label></p>
+<p><input type="text" name="memo" value=""></p>
+<p><label for="beneficiaries">Бенефициары:</label></p>
+<p><input type="text" name="beneficiaries" value="" placeholder="denis-skripnik:30,on1x:50"></p>
+<p><label for="redirect">Ссылка для перенаправления после успешной награды:</label></p>
+<p><input type="text" name="redirect" value=""></p>
+<p><strong><input type="submit" value="Наградить"></strong></p>
+</form>
+
+<script>
+if (localStorage.getItem('energy_percent')) {
+document.getElementById('awarding_energy').value = localStorage.getItem('energy_percent');
+}
+</script>
+
+</body>
+</html>
