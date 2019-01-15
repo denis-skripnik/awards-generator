@@ -44,8 +44,8 @@ function getUrlVars() {
 
 if (getUrlVars()['target']) {
 var award_target = getUrlVars()['target'];
-} else {
-var award_target = viz_login;
+} else if (localStorage.getItem('login')) {
+var award_target = localStorage.getItem('login');
 }
 if (getUrlVars()['energy']) {
 var award_energy = getUrlVars()['energy'];
