@@ -16,7 +16,7 @@
             <p><label for="posting">Введите приватный постинг ключ (Начинается с 5). Внимание: он никуда не передаётся, все операции выполняются у вас на компьютере, в вашем браузере.</label></p>
             <p><input type="password" name="posting" id="this_posting"></p>
             <p><input type="checkbox" id="isSavePosting"> Сохранить логин и Постинг ключ</p>
-            <p align="center"><input type="button" value="Войти для отправки награды" onclick="awardAuth()"></p>
+            <p align="center"><input type="button" value="Войти для отправки награды" onclick="awardAuth(true)"></p>
         </form>
         <div id="delete_posting_key"></div>
         <div id="main_award_info" style="display: none;">
@@ -28,16 +28,23 @@
 </footer>
 
 <script>
-if (!localStorage.getItem('login') && !localStorage.getItem('PostingKey')) {
-	$('#delete_posting_key').css("display", "none");
-				$('#unblock_form').css("display", "block");
-} else {
-viz_login = localStorage.getItem('login');
+if (localStorage.getItem('login') && localStorage.getItem('PostingKey')) {
+    viz_login = localStorage.getItem('login');
 posting_key = sjcl.decrypt(viz_login + '_postingKey', localStorage.getItem('PostingKey'));
     $('#unblock_form').css("display", "none");
 	$('#delete_posting_key').css("display", "block");
 	jQuery("#delete_posting_key").html('<p align="center"><a onclick="localStorage.removeItem(\'login\'\); localStorage.removeItem(\'PostingKey\'\);     location.reload();">Выйти</a></p>');
 	send_award(viz_login, posting_key);
+} else if (sessionStorage.getItem('login') && sessionStorage.getItem('PostingKey')) {
+viz_login = sessionStorage.getItem('login');
+posting_key = sjcl.decrypt(viz_login + '_postingKey', sessionStorage.getItem('PostingKey'));
+    $('#unblock_form').css("display", "none");
+	$('#delete_posting_key').css("display", "block");
+	jQuery("#delete_posting_key").html('<p align="center"><a onclick="sessionStorage.removeItem(\'login\'\); sessionStorage.removeItem(\'PostingKey\'\);     location.reload();">Выйти</a></p>');
+	send_award(viz_login, posting_key);
+} else {
+	$('#delete_posting_key').css("display", "none");
+				$('#unblock_form').css("display", "block");
 }
     </script>
 </body>
