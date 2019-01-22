@@ -83,6 +83,15 @@ $("#max_payout").click(function () {
 	$("#awarding_energy").val(payout_energy);
 });
 
+$("input[name='energy']").change(function() {
+var input_energy = $("input[name='energy']").val();
+input_energy *= 100;
+input_energy = parseInt(input_energy);
+input_energy = input_energy/100;
+	var change_payout = vesting_shares * input_energy /100 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
+	change_payout = parseInt(change_payout) / 1000000;
+	$("input[name='payout']").val(change_payout);
+});
 $("input[name='payout']").change(function() {
 	var payout = $('input[name=payout]').val();
 	var payout_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/vesting_shares;
@@ -97,23 +106,25 @@ $("input[name='payout']").change(function() {
 }
 
 async function send_award(viz_login, posting_key) {
+	const [acc] = await viz.api.getAccountsAsync([viz_login]);
+	const props = await viz.api.getDynamicGlobalPropertiesAsync();
+
+	const vesting_shares = parseFloat(acc.vesting_shares);
+	const total_vesting_fund = parseFloat(props.total_vesting_fund);
+	const total_vesting_shares = parseFloat(props.total_vesting_shares);
+		const total_reward_fund = parseFloat(props.total_reward_fund);
+	const total_reward_shares = parseInt(props.total_reward_shares);
+
 	if (getUrlVars()['target']) {
 		var award_target = getUrlVars()['target'];
+award_target = award_target.toLowerCase();
 	} else {
 		var award_target = viz_login;
 	}
 
 		if (getUrlVars()['payout']) {
 			var payout = getUrlVars()['payout'];
-			const [acc] = await viz.api.getAccountsAsync([viz_login]);
-			const props = await viz.api.getDynamicGlobalPropertiesAsync();
-		
-			const vesting_shares = parseFloat(acc.vesting_shares);
-			const total_vesting_fund = parseFloat(props.total_vesting_fund);
-			const total_vesting_shares = parseFloat(props.total_vesting_shares);
-				const total_reward_fund = parseFloat(props.total_reward_fund);
-			const total_reward_shares = parseInt(props.total_reward_shares);
-		
+
 		var award_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/vesting_shares;
 		award_energy *= 100;
 		award_energy *= 100;
@@ -122,8 +133,9 @@ async function send_award(viz_login, posting_key) {
 		if (getUrlVars()['energy']) {
 			var award_energy = getUrlVars()['energy'];
 			award_energy *= 100;
+			award_energy = parseInt(award_energy);
 		} else {
-			var award_energy = 0.01;
+			var award_energy = 1;
 		}
 		}
 		if (getUrlVars()['custom_sequence']) {
@@ -141,17 +153,29 @@ async function send_award(viz_login, posting_key) {
 		var beneficiaries = decodeURIComponent(getUrlVars()['beneficiaries']);
 		var benef = beneficiaries.split(',');
 		var benef_list = [];
+var beneficiaries_whait = 0;
 		benef.forEach(function (el) {
 		var b = el.split(':');
 		var benef_login = b[0];
+		benef_login = benef_login.toLowerCase();
 		var benef_percent = +b[1]*100;
+		beneficiaries_whait += benef_percent/100;
 		benef_list.push({account:benef_login,weight:benef_percent});
 		});
 		} else {
+var beneficiaries_whait = 0;
 			var benef_list = [];
 		}
 		var redirect = getUrlVars()['redirect'];
 		
+
+// Рассчёт стоимости награды:
+var all_award_payout = vesting_shares * award_energy /10000 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
+var beneficiaries_payout = (all_award_payout/100)*beneficiaries_whait;
+var award_payout = all_award_payout - beneficiaries_payout;
+all_award_payout = parseInt(all_award_payout) / 1000000;
+beneficiaries_payout = parseInt(beneficiaries_payout) / 1000000;
+award_payout = parseInt(award_payout) / 1000000;
 
 		viz.broadcast.awardAsync(posting_key,viz_login,award_target,award_energy,custom_sequence,memo,benef_list, (err,result) => {
 if (!err) {
@@ -163,18 +187,40 @@ $('#account_energy').html(res[0].energy/100 + '%');
 });
 
 	jQuery("#main_award_info").css("display", "block");
-	$('#main_award_info').html('<h1>Результат:</h1>\
-<p><strong>Вы успешно отправили награду.</strong></p>\
-<ul><li>Направление: ' + award_target + '</li>\
-<li>Затрачиваемый процент энергии: ' + award_energy/100 + '%</li>\
-<li>Номер Custom операции (С каждой операцией он увеличивается в get_accounts): ' + custom_sequence + '</li>\
-<li>Заметка (Memo, описание; назначение может быть любым): ' + memo + '</li>\
-<li>Бенефициары: ' + JSON.stringify(beneficiaries) + '</li>\
-<li>Осталось энергии на момент последней награды: <span id="account_energy"></span></li>\
-</ul>');
+	$('#main_award_info').html(`<h1>Результат:</h1>
+<p><strong>Вы успешно отправили награду.</strong></p>
+<ul><li>Направление: ${award_target}</li>
+<li>Затрачиваемый процент энергии: ${award_energy/100}%</li>
+<li>Примерная награда в SHARES:
+общая: ${all_award_payout},
+Бенефициарам: ${beneficiaries_payout},
+Награждаемому: ${award_payout}</li>
+<li>Номер Custom операции (С каждой операцией он увеличивается в get_accounts): ${custom_sequence}</li>
+<li>Заметка (Memo, описание; назначение может быть любым): ${memo}</li>
+<li>Бенефициары: ${JSON.stringify(beneficiaries)}</li>
+<li>Осталось энергии на момент последней награды: <span id="account_energy"></span></li>
+</ul>`);
 }
 } else {
+	if (/used_energy <= current_energy/.test(err)) {
+		jQuery("#main_award_info").css("display", "block");
+		$('#main_award_info').html(`<h1>Указанный вами процент энергии > имеющейся у авторизованного аккаунта</h1>
+<p align="center">Просьба проверить значение energy в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+	} else if (/beneficiaries.weight = NaN/.test(err)) {
+		jQuery("#main_award_info").css("display", "block");
+		$('#main_award_info').html(`<h1>Вы указали бенефициара, но не указали процент, который он получит</h1>
+<p align="center">Просьба проверить значение после двоеточия в beneficiaries (адресная строка) или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+	} else if (/acc != nullptr: Beneficiary/.test(err)) {
+		jQuery("#main_award_info").css("display", "block");
+		$('#main_award_info').html(`<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
+<p align="center">Просьба проверить значение beneficiaries в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+	} else if (/is_valid_account_name\(name\): Account name/.test(err)) {
+		jQuery("#main_award_info").css("display", "block");
+		$('#main_award_info').html(`<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
+<p align="center">Просьба проверить значение target и beneficiaries (Первую часть до двоеточия) в адресной строке.  Также можно ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+} else {
 window.alert(err);
+}
 }
 });
 }
@@ -223,9 +269,7 @@ if (IsPageSend === true) {
 			} // end awardAuth
 
 			var benif = '';
-			var authorLogin = 'denis-skripnik';
-			var authorWeight = 5;
-			var maxweightsum = 100 - authorWeight;
+			var maxweightsum = 100;
 			var weightsum = 0;
 			
 			function updateText() {
@@ -244,28 +288,23 @@ if (IsPageSend === true) {
 							" Вы можете ввести максимум " + (maxweightsum - weightsum) + "%.");
 					}
 				} else {
-					if (nick === authorLogin) {
-						benif += authorLogin + ':' + per + ',';
-					} else {
 						benif += nick + ':' + per + ',';
-					}
 			
-			benif = benif.replace(/,\s*$/, "");
 					
 					weightsum += per;
 			
+
 					updateText()
 				}
 			}
 			
-			benif += authorLogin + ':' + authorWeight + ',';
 
-			updateText();
 			updateText();
 
 // Для furm.html:
 async function awardFormSend() {
-var form = document.getElementById('award_user_form');
+	benif = benif.replace(/,\s*$/, "");
+	var form = document.getElementById('award_user_form');
 var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: form.memo.value, beneficiaries: benif, redirect: form.redirect.value};
 
 var url_str = '';
@@ -282,6 +321,7 @@ window.location.href = url_str;
 
 // Для url.html:
 async function view_url() {
+	benif = benif.replace(/,\s*$/, "");
 	var form = document.getElementById('AwardUrlForm');
 	var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: form.memo.value, beneficiaries: benif, redirect: form.redirect.value};
 	$("#award_url").css("display", "block");
