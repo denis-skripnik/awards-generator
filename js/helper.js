@@ -47,6 +47,9 @@ async function accountData(current_user) {
 	const [acc] = await viz.api.getAccountsAsync([current_user]);
 	const props = await viz.api.getDynamicGlobalPropertiesAsync();
 	const vesting_shares = parseFloat(acc.vesting_shares);
+	const delegated_vesting_shares = parseFloat(acc.delegated_vesting_shares);
+	const received_vesting_shares = parseFloat(acc.received_vesting_shares);
+const effective_vesting_shares = vesting_shares + received_vesting_shares - delegated_vesting_shares;
 	const total_vesting_fund = parseFloat(props.total_vesting_fund);
 	const total_vesting_shares = parseFloat(props.total_vesting_shares);
 		const total_reward_fund = parseFloat(props.total_reward_fund);
@@ -60,7 +63,7 @@ if(new_energy>10000){
 	new_energy=10000;
 	}
 
-	var shares1energy = 1*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/vesting_shares;
+	var shares1energy = 1*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/effective_vesting_shares;
 	shares1energy *= 100;
 	shares1energy *= 100;
 	shares1energy = parseInt(shares1energy);
@@ -68,13 +71,13 @@ if(new_energy>10000){
 
 	$("#now_energy").html('Актуальная энергия пользователя ' + current_user + ': ' + new_energy/100 + '%. 1 SHARES ≈ ' + shares1energy + '% энергии.');
 
-	var max_payout = vesting_shares * new_energy /10000 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
+	var max_payout = effective_vesting_shares * new_energy /10000 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
 	max_payout = parseInt(max_payout) / 1000000;
 $("#max_payout").html(' (Максимум: ' + max_payout + ')');
 $("#max_payout").click(function () {
 	$('input[name=payout]').val(max_payout);
 
-	var payout_energy = max_payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/vesting_shares;
+	var payout_energy = max_payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/effective_vesting_shares;
 	payout_energy *= 100;
 	payout_energy *= 100;
 	payout_energy = parseInt(payout_energy);
@@ -88,13 +91,13 @@ var input_energy = $("input[name='energy']").val();
 input_energy *= 100;
 input_energy = parseInt(input_energy);
 input_energy = input_energy/100;
-	var change_payout = vesting_shares * input_energy /100 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
+	var change_payout = effective_vesting_shares * input_energy /100 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
 	change_payout = parseInt(change_payout) / 1000000;
 	$("input[name='payout']").val(change_payout);
 });
 $("input[name='payout']").change(function() {
 	var payout = $('input[name=payout]').val();
-	var payout_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/vesting_shares;
+	var payout_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/effective_vesting_shares;
 	payout_energy *= 100;
 	payout_energy *= 100;
 	payout_energy = parseInt(payout_energy);
@@ -128,7 +131,7 @@ award_target = award_target.toLowerCase();
 		if (getUrlVars()['payout']) {
 			var payout = getUrlVars()['payout'];
 
-		var award_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/vesting_shares;
+		var award_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/effective_vesting_shares;
 		award_energy *= 100;
 		award_energy *= 100;
 		award_energy = parseInt(award_energy);
