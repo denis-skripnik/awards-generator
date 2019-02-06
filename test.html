@@ -1,0 +1,16 @@
+
+<form action="index.html"><input type="hidden" name="target" value="test_user">
+Процент энергии:<br>
+<div id="slider_energy"></div><br>
+<input type="text" name="energy" id="energy_slider_value" value="16%">
+Номер Custom операции<br><input type="text" name="custom_sequence" value="13"><br>
+Процент возврата пользователю<br><div id="enegry_back_slider"></div><input type="text" name="enegry_back" id="enegry_back" value="1%"><br>
+<input type="hidden" name="temp_beneficiaries" id="temp_beneficiaries" value="app:5,7:">
+<input type="hidden" name="beneficiaries" id="beneficiaries" value="app:5,7:1">
+<input type="submit" value="Отправить">
+</form>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>$("#slider_energy").slider({value:16,min:0,max:101,step:1,slide:function(e,i){$("#energy_slider_value").val($(this).slider("value")+"%")},stop:function(e,i){20<$(this).slider("value")&&alert('Вы выбрали > 20% энергии. Вам будет доступно мало наград')}});</script>
+<script>$("#enegry_back_slider").slider({value:1,min:0,max:51,step:1,slide:function(e,a){$("#enegry_back").val($(this).slider("value")+"%")},stop:function(e,a){$("#beneficiaries").val($("#temp_beneficiaries").val()+$("#enegry_back").val().replace(/D+/g,""))}})</script>
+<script src="generator.js"></script>

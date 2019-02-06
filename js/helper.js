@@ -110,6 +110,9 @@ async function send_award(viz_login, posting_key) {
 	const props = await viz.api.getDynamicGlobalPropertiesAsync();
 
 	const vesting_shares = parseFloat(acc.vesting_shares);
+	const delegated_vesting_shares = parseFloat(acc.delegated_vesting_shares);
+	const received_vesting_shares = parseFloat(acc.received_vesting_shares);
+const effective_vesting_shares = vesting_shares + received_vesting_shares - delegated_vesting_shares;
 	const total_vesting_fund = parseFloat(props.total_vesting_fund);
 	const total_vesting_shares = parseFloat(props.total_vesting_shares);
 		const total_reward_fund = parseFloat(props.total_reward_fund);
@@ -170,7 +173,7 @@ var beneficiaries_whait = 0;
 		
 
 // Рассчёт стоимости награды:
-var all_award_payout = vesting_shares * award_energy /10000 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
+var all_award_payout = effective_vesting_shares * award_energy /10000 / (total_reward_shares/1000000) * total_reward_fund / (total_vesting_fund / total_vesting_shares)*1000000;
 var beneficiaries_payout = (all_award_payout/100)*beneficiaries_whait;
 var award_payout = all_award_payout - beneficiaries_payout;
 all_award_payout = parseInt(all_award_payout) / 1000000;
