@@ -71,9 +71,9 @@ if(new_energy>10000){
 
 	$("#now_energy").html('Актуальная энергия пользователя ' + current_user + ': ' + new_energy/100 + '%. 1 SHARES ≈ ' + shares1energy + '% энергии.');
 
-	var viz_price = parseInt((total_vesting_shares * 1000000) / (total_vesting_fund * 1000000)); //цена одного viz int
+	var viz_price = parseInt(total_vesting_shares * 1000000) / parseInt(total_vesting_fund * 1000000); //цена одного viz int
 	var rshares = parseInt(effective_vesting_shares * 1000000 * new_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-	var max_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000) * viz_price); //количество shares за авард int
+	var max_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
 	max_payout = max_payout / 1000000; // количество shares в десятичном виде float
 $("#max_payout").html(' (Максимум: ' + max_payout + ')');
 $("#max_payout").click(function () {
@@ -93,9 +93,9 @@ var input_energy = $("input[name='energy']").val();
 input_energy *= 100;
 input_energy = parseInt(input_energy);
 
-var viz_price = parseInt((total_vesting_shares * 1000000) / (total_vesting_fund * 1000000)); //цена одного viz int
+var viz_price = parseInt(total_vesting_shares * 1000000) / parseInt(total_vesting_fund * 1000000); //цена одного viz int
 var rshares = parseInt(effective_vesting_shares * 1000000 * input_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-var change_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000) * viz_price); //количество shares за авард int
+var change_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
 change_payout = change_payout / 1000000; // количество shares в десятичном виде float
 	$("input[name='payout']").val(change_payout);
 });
@@ -180,9 +180,9 @@ var beneficiaries_whait = 0;
 		
 
 // Рассчёт стоимости награды:
-var viz_price = parseInt((total_vesting_shares * 1000000) / (total_vesting_fund * 1000000)); //цена одного viz int
+var viz_price = parseInt(total_vesting_shares * 1000000) / parseInt(total_vesting_fund * 1000000); //цена одного viz int
 var rshares = parseInt(effective_vesting_shares * 1000000 * award_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000) * viz_price); //количество shares за авард int
+var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
 var beneficiaries_payout = (all_award_payout/100)*beneficiaries_whait;
 var award_payout = all_award_payout - beneficiaries_payout;
 all_award_payout = all_award_payout / 1000000; // количество shares в десятичном виде float
