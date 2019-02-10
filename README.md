@@ -87,7 +87,7 @@ denis-skripnik:25,on1x:50 (Отправит бенефициарам 75%, а н�
 ## Всё
 Пользоваться awards-generator можно, используя https://liveblogs.space/awards
 Форма: https://liveblogs.space/awards/form.html
-url имеют вид: https://liveblogs.space/awards?target=denis-skripnik&energy=10
+url имеют вид: index.html?target=denis-skripnik&energy=10
 
 ***
 

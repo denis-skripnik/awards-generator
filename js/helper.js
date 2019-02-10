@@ -217,19 +217,19 @@ $('#account_energy').html(res[0].energy/100 + '%');
 	if (/used_energy <= current_energy/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>Указанный вами процент энергии > имеющейся у авторизованного аккаунта</h1>
-<p align="center">Просьба проверить значение energy в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение energy в адресной строке или ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
 	} else if (/beneficiaries.weight = NaN/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>Вы указали бенефициара, но не указали процент, который он получит</h1>
-<p align="center">Просьба проверить значение после двоеточия в beneficiaries (адресная строка) или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение после двоеточия в beneficiaries (адресная строка) или ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
 	} else if (/acc != nullptr: Beneficiary/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
-<p align="center">Просьба проверить значение beneficiaries в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение beneficiaries в адресной строке или ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
 	} else if (/is_valid_account_name\(name\): Account name/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
-<p align="center">Просьба проверить значение target и beneficiaries (Первую часть до двоеточия) в адресной строке.  Также можно ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение target и beneficiaries (Первую часть до двоеточия) в адресной строке.  Также можно ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
 } else {
 window.alert(err);
 }
