@@ -1,2 +1,2 @@
-English version: en/README.md
-Russion version: ru/README.MD
+English version: [en/README.md](en/README.md)
+Russion version: [ru/README.MD](ru/README.MD)
