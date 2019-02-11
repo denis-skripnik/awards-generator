@@ -118,11 +118,9 @@ $(document).ready(function() {
 		});*/
 	});
 	
-	function AuthForm() {
+	async function AuthForm() {
 		let login = $('#this_login').val();
 		let posting = $('#this_posting').val();
-		localStorage.setItem('login', login);
-		localStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
 		
 		if (localStorage.getItem('PostingKey')) {
 			var isPostingKey = sjcl.decrypt(login + '_postingKey', localStorage.getItem('PostingKey'));
@@ -133,14 +131,35 @@ $(document).ready(function() {
 		}
 
 		var resultIsPostingWif = viz.auth.isWif(isPostingKey);
-		console.log(resultIsPostingWif);
 		if (resultIsPostingWif === true) {
-			viz_login = login;
-			posting_key = isPostingKey;
-		} else {
+			const account_approve = await viz.api.getAccountsAsync([login]);
+			const public_wif = viz.auth.wifToPublic(isPostingKey);
+			let posting_public_keys = [];
+			if (account_approve.length > 0) {
+			for (key of account_approve[0].posting.key_auths) {
+			posting_public_keys.push(key[0]);
+			}
+			} else {
+			window.alert('Вероятно, аккаунт не существует. Просьба проверить введённый логин.');
+			}
+			if (posting_public_keys.includes(public_wif)) {
+			localStorage.setItem('login', login);
+				localStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
+					sessionStorage.setItem('login', login);
+					sessionStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
+			
+				viz_login = login;
+						posting_key = isPostingKey;
+			} else if (account_approve.length === 0) {
+			window.alert('Аккаунт не существует. Пожалуйста, проверьте его');
+			} else {
+				window.alert('Постинг ключ не соответствует пренадлежащему аккаунту.');
+			}
+					} else {
 			window.alert('Постинг ключ имеет неверный формат. Пожалуйста, попробуйте ещё раз.');
-		}
-
+			}
+			
+			
 		if (!viz_login && !posting_key) {
 			alert("Не удалось авторизироваться с текущей парой логин/ключ");
 		} else {

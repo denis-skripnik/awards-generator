@@ -71,7 +71,7 @@ if(new_energy>10000){
 
 	$("#now_energy").html('Актуальная энергия пользователя ' + current_user + ': ' + new_energy/100 + '%. 1 SHARES ≈ ' + shares1energy + '% энергии.');
 
-	var viz_price = parseInt(total_vesting_shares * 1000000) / parseInt(total_vesting_fund * 1000000); //цена одного viz int
+	var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
 	var rshares = parseInt(effective_vesting_shares * 1000000 * new_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
 	var max_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
 	max_payout = max_payout / 1000000; // количество shares в десятичном виде float
@@ -93,7 +93,7 @@ var input_energy = $("input[name='energy']").val();
 input_energy *= 100;
 input_energy = parseInt(input_energy);
 
-var viz_price = parseInt(total_vesting_shares * 1000000) / parseInt(total_vesting_fund * 1000000); //цена одного viz int
+var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
 var rshares = parseInt(effective_vesting_shares * 1000000 * input_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
 var change_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
 change_payout = change_payout / 1000000; // количество shares в десятичном виде float
@@ -180,7 +180,7 @@ var beneficiaries_whait = 0;
 		
 
 // Рассчёт стоимости награды:
-var viz_price = parseInt(total_vesting_shares * 1000000) / parseInt(total_vesting_fund * 1000000); //цена одного viz int
+var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
 var rshares = parseInt(effective_vesting_shares * 1000000 * award_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
 var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
 var beneficiaries_payout = (all_award_payout/100)*beneficiaries_whait;
@@ -217,19 +217,19 @@ $('#account_energy').html(res[0].energy/100 + '%');
 	if (/used_energy <= current_energy/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>Указанный вами процент энергии > имеющейся у авторизованного аккаунта</h1>
-<p align="center">Просьба проверить значение energy в адресной строке или ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение energy в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
 	} else if (/beneficiaries.weight = NaN/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>Вы указали бенефициара, но не указали процент, который он получит</h1>
-<p align="center">Просьба проверить значение после двоеточия в beneficiaries (адресная строка) или ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение после двоеточия в beneficiaries (адресная строка) или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
 	} else if (/acc != nullptr: Beneficiary/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
-<p align="center">Просьба проверить значение beneficiaries в адресной строке или ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение beneficiaries в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
 	} else if (/is_valid_account_name\(name\): Account name/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
-<p align="center">Просьба проверить значение target и beneficiaries (Первую часть до двоеточия) в адресной строке.  Также можно ввести новое в <a href="form.html" target="_blank">форме</a>.</p>`);
+<p align="center">Просьба проверить значение target и beneficiaries (Первую часть до двоеточия) в адресной строке.  Также можно ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
 } else {
 window.alert(err);
 }
@@ -237,17 +237,9 @@ window.alert(err);
 });
 }
 
-function awardAuth(IsPageSend) {
+async function awardAuth(IsPageSend) {
 			let login = $('#this_login').val();
 			let posting = $('#this_posting').val();
-var isSavePosting = document.getElementById('isSavePosting');
-			if (isSavePosting.checked) {
-		localStorage.setItem('login', login);
-			localStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
-			} else {
-				sessionStorage.setItem('login', login);
-				sessionStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
-			}
 			if (localStorage.getItem('PostingKey')) {
 		var isPostingKey = sjcl.decrypt(login + '_postingKey', localStorage.getItem('PostingKey'));
 			} else if (sessionStorage.getItem('PostingKey')) {
@@ -257,11 +249,36 @@ var isPostingKey = posting;
 }
 
 			var resultIsPostingWif = viz.auth.isWif(isPostingKey);
-console.log(resultIsPostingWif);
+
 			if (resultIsPostingWif === true) {
-viz_login = login;
-			posting_key = isPostingKey;
+const account_approve = await viz.api.getAccountsAsync([login]);
+const public_wif = viz.auth.wifToPublic(isPostingKey);
+let posting_public_keys = [];
+if (account_approve.length > 0) {
+for (key of account_approve[0].posting.key_auths) {
+posting_public_keys.push(key[0]);
+}
 } else {
+window.alert('Вероятно, аккаунт не существует. Просьба проверить введённый логин.');
+}
+if (posting_public_keys.includes(public_wif)) {
+	var isSavePosting = document.getElementById('isSavePosting');
+	if (isSavePosting.checked) {
+localStorage.setItem('login', login);
+	localStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
+	} else {
+		sessionStorage.setItem('login', login);
+		sessionStorage.setItem('PostingKey', sjcl.encrypt(login + '_postingKey', posting));
+	}
+
+	viz_login = login;
+			posting_key = isPostingKey;
+} else if (account_approve.length === 0) {
+window.alert('Аккаунт не существует. Пожалуйста, проверьте его');
+} else {
+	window.alert('Постинг ключ не соответствует пренадлежащему аккаунту.');
+}
+		} else {
 window.alert('Постинг ключ имеет неверный формат. Пожалуйста, попробуйте ещё раз.');
 }
 
