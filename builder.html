@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Генератор</title>
+        <title>Конструктор форм наград</title>
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -71,7 +71,7 @@
 <p>"Кого наградить" - это настройка, позволяющая передать награду. После клика по кнопке "Получить код" вы увидете в первом многострочном поле (textarea) пример передачи значения "кому" в переменную target_user, которую определяет скрипт формы. Это необходимо, чтобы вы могли передать из своего приложения, например, из базы данных, логин получателя награды в VIZ.</p>
 <p>Для работы формы в вашем приложении понадобится подключить скрипт viz.min.js, если его ещё нет. Адрес скрипта:
 <strong>https://cdn.jsdelivr.net/npm/viz-world-js@latest/dist/viz.min.js</strong></p>
-<ol><li>Скрипт generator.js: <a href="generator.js" target="_blank">Скачать</a></li>
+<ol><li>Скрипт builder.js: <a href="builder.js" target="_blank">Скачать</a></li>
 <li>Скрипт sjcl.min.js для шифрования и расшифровки постинг ключа: <a href="js/sjcl.min.js" target="_blank">Скачать</a></li></ol>
 
 <h2>Настройка будущей формы</h2>
@@ -381,7 +381,7 @@
 				if (get_login()) {
 					$("#f_b_username").val(get_login());	
 				}*/
-				$("#pre_code").append("\r\n<script src=\"generator.js\">");					
+				$("#pre_code").append("\r\n<script src=\"builder.js\">");					
 			}
 			//Проверка отображения
 			$('.pay_method').change(function() {
@@ -475,6 +475,6 @@
 			});		
 			/**/
 		</script>
-		<script src="generator.js"></script>
+		<script src="builder.js"></script>
 	</body>
 </html>
