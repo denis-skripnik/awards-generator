@@ -69,11 +69,6 @@
 <p>С помощью данного сервиса вы можете создать форму отправки награды для размещения на сайте.</p>
 <p>Отмеченные флажки (чекбоксы) = отображение поля в форме награды, что будет у вас в приложении (На сайте, в расширении и т. д.)</p>
 <p>"Кого наградить" - это настройка, позволяющая передать награду. После клика по кнопке "Получить код" вы увидете в первом многострочном поле (textarea) пример передачи значения "кому" в переменную target_user, которую определяет скрипт формы. Это необходимо, чтобы вы могли передать из своего приложения, например, из базы данных, логин получателя награды в VIZ.</p>
-<p>Для работы формы в вашем приложении понадобится подключить скрипт viz.min.js, если его ещё нет. Адрес скрипта:
-<strong>https://cdn.jsdelivr.net/npm/viz-world-js@latest/dist/viz.min.js</strong></p>
-<ol><li>Скрипт builder.js: <a href="builder.js" target="_blank">Скачать</a></li>
-<li>Скрипт sjcl.min.js для шифрования и расшифровки постинг ключа: <a href="js/sjcl.min.js" target="_blank">Скачать</a></li></ol>
-
 <h2>Настройка будущей формы</h2>
 		<table id="work_area">
 			<tr>
@@ -148,7 +143,7 @@
 					</ul>
 					<div class="non_sortable_field">
 						<strong>Получать данные по URL</strong><br>
-						<label><input type="radio" name="url_mode" class="url_mode form_update" value="ajax" checked> AJAX</label><br>
+						<label><input type="radio" name="url_mode" class="url_mode form_update" value="ajax" checked> Получать результат из скрипта формы</label><br>
 						<label><input type="radio" name="url_mode" class="url_mode form_update" value="redirect"> Редирект</label><br>
 						
 						<div id="url_redirect">
@@ -159,6 +154,14 @@
 				</td>
 				<td>
 					<h3>Форма результат:</h3>
+					<p>Для работы формы в вашем приложении понадобится подключить скрипт viz.min.js, если его ещё нет. Адрес скрипта:
+<strong>https://cdn.jsdelivr.net/npm/viz-world-js@latest/dist/viz.min.js</strong></p>
+<ol><li>Скрипт builder.js: <a href="builder.js" target="_blank">Скачать</a></li>
+<li>Скрипт sjcl.min.js для шифрования и расшифровки постинг ключа: <a href="js/sjcl.min.js" target="_blank">Скачать</a></li></ol>
+<p>Для работы формы в вашем приложении понадобится подключить скрипт viz.min.js, если его ещё нет. Адрес скрипта:
+	<strong>https://cdn.jsdelivr.net/npm/viz-world-js@latest/dist/viz.min.js</strong></p>
+	<ol><li>Скрипт builder.js: <a href="builder.js" target="_blank">Скачать</a></li>
+	<li>Скрипт sjcl.min.js для шифрования и расшифровки постинг ключа: <a href="js/sjcl.min.js" target="_blank">Скачать</a></li></ol>
 					<div id="result"><form action="test.php"></form></div>
 					<button onclick="get_code()">Получить код</button>
 					<textarea id="head_code"></textarea>

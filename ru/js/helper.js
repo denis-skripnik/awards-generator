@@ -369,3 +369,46 @@ async function view_url() {
 	$("#award_textarea").html(url_str);
 	}
 	
+
+async function awards_history() {
+var account = getUrlVars()['account'];
+var type = getUrlVars()['type'];
+var limit = getUrlVars()['limit'];
+var initiator = getUrlVars()['initiator'];
+var receiver = getUrlVars()['receiver'];
+var benefactor = getUrlVars()['benefactor'];
+
+if (account) {
+account = account;
+} else {
+account = '';
+window.alert('Ошибка: вы не указали аккаунт. Добавьте к url account=name, где name - логин.');
+}
+
+if (type === 'receive_award' || type === 'benefactor_award' || type === 'award') {
+type = type;
+} else {
+type = false;
+window.alert('Вы указали несуществующий тип. Варианты: award, receive_award, benefactor_award');
+}
+
+if (limit <= 10000) {
+limit = limit;
+} else {
+limit = 10000;
+}
+
+var query = [];
+if (type) {
+query.push({"select_ops": type});
+}
+
+try {
+const award_history = await viz.api.getAccountHistoryAsync(account, -1, limit, query);
+$("body").html(JSON.stringify(award_history));
+
+} catch(e) {
+$("body").html('{error: ' + e + '}');
+}
+
+}
