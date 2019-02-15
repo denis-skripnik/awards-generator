@@ -32,13 +32,13 @@ function checkWorkingNode() {
 checkWorkingNode();
 
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function(){
 	if (target_user) {
-		$("#target").val(target_user);
+document.getElementById('target').value = target_user;
 	}
 	
-	$('#target').change(function() {
-		check_login($(this).val());
+document.getElementById("target").onchange = function(){
+		check_login(document.getElementById("target").value);
 	});
 	$("#energy_slider_value").keyup(function() {
 		if ($(this).val().replace(/[^0-9]/g, '') < 101) {
@@ -48,49 +48,49 @@ $(document).ready(function() {
 			alert("Значение не может превышать 100%")
 		}
 	});		
-	$("#enegry_back").keyup(function() {
-		if ($(this).val().replace(/[^0-9]/g, '') < 101) {
-			if ($("#enegry_back_slider").length > 0) {
-				$("#enegry_back_slider").slider("value", $(this).val().replace(/[^0-9]/g, ''));
-				$("#beneficiaries").val($("#temp_beneficiaries").val() + $("#enegry_back").val().replace(/[^0-9]/g, ''));	
+ document.getElementById("enegry_back").addEventListener("keyup", function () {
+		if (document.getElementById("enegry_back").value.replace(/[^0-9]/g, '') < 101) {
+			if (document.getElementById("enegry_back_slider").length > 0) {
+				document.getElementById("enegry_back_slider").slider("value", $(this).val().replace(/[^0-9]/g, ''));
+				document.getElementById("beneficiaries").value = document.getElementById("temp_beneficiaries").value + document.getElementById("enegry_back").value.replace(/[^0-9]/g, '');
 			} else {
-				$("#beneficiaries").val($("#temp_beneficiaries").val() + $("#enegry_back").val().replace(/[^0-9]/g, ''));				
+document.getElementById("beneficiaries").value = document.getElementById("temp_beneficiaries").value + document.getElementById("enegry_back").value.replace(/[^0-9]/g, '');
 			}
 		} else {
-			$(this).val("100%");
+document.getElementById("enegry_back").value = "100%";
 			alert("Значение не может превышать 100%")
 		}
 	});		
-	$("#temp_energy").keyup(function() {
-		if ($(this).val().replace(/[^0-9]/g, '') > 100) {
-			$(this).val("100%");
+ document.getElementById("temp_energy").addEventListener("keyup", function () {
+		if (document.getElementById("temp_energy").value.replace(/[^0-9]/g, '') > 100) {
+document.getElementById("temp_energy").value = "100%";
 			alert("Значение не может превышать 100%");
 		}
-		$("#send_energy").val($(this).val().replace(/[^0-9]/g, ''));
+		document.getElementById("send_energy").value = document.getElementById("temp_energy").value.replace(/[^0-9]/g, '');
 	});
 	
 	
 	if (localStorage.getItem('login') && localStorage.getItem('PostingKey')) {
 		viz_login = localStorage.getItem('login');
 		posting_key = sjcl.decrypt(viz_login + '_postingKey', localStorage.getItem('PostingKey'));
-		if ($("#temp_beneficiaries").length > 0) {
-			$("#temp_beneficiaries").val($("#temp_beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("temp_beneficiaries").length > 0) {
+			document.getElementById("temp_beneficiaries").value = document.getElementById("temp_beneficiaries").value.replace('user_login', viz_login);
 		}
-		if ($("#beneficiaries").length > 0) {
-			$("#beneficiaries").val($("#beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("beneficiaries").length > 0) {
+document.getElementById("beneficiaries").value = document.getElementById("beneficiaries").value.replace('user_login', viz_login);
 		}
 	} else if (sessionStorage.getItem('login') && sessionStorage.getItem('PostingKey')) {
 		viz_login = sessionStorage.getItem('login');
 		posting_key = sjcl.decrypt(viz_login + '_postingKey', sessionStorage.getItem('PostingKey'));send_award(viz_login, posting_key);
-		if ($("#temp_beneficiaries").length > 0) {
-			$("#temp_beneficiaries").val($("#temp_beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("temp_beneficiaries").length > 0) {
+document.getElementById("temp_beneficiaries").value = document.getElementById("temp_beneficiaries").value.replace('user_login', viz_login);
 		}
-		if ($("#beneficiaries").length > 0) {
-			$("#beneficiaries").val($("#beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("beneficiaries").length > 0) {
+			document.getElementById("beneficiaries").value = document.getElementById("beneficiaries").value.replace('user_login', viz_login);
 		}
 	} else {
-		$("#send_awards_form").css("display","none");
-		if ($("#sortable").length > 0) {
+document.getElementById("send_awards_form").style.display = 'none';
+		if (document.getElementById("sortable").length > 0) {
 		} else {	
 			$("#awards_send_form").append("<form id=\"auth_form\" action=\"index.html\" method=\"GET\"><p class=\"auth_title\"><strong>Пожалуйста авторизируйтесь</strong></p><input type=\"text\" id=\"this_login\" name=\"viz_login\" placeholder=\"Ваш логин\"><br><input type=\"password\" name=\"posting\" id=\"this_posting\" placeholder=\"Приватный постинг ключ\"><br><input type=\"submit\" value=\"Войти\"></form>");
 		}
