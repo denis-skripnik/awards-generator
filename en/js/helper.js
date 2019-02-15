@@ -1,7 +1,7 @@
 function checkWorkingNode() {
 	const NODES = [
-	 "wss://ws.viz.ropox.tools", 
 	 "wss://viz.lexai.host",
+	"wss://ws.viz.ropox.tools", 
 "wss://solox.world/ws"
 	];
 	let node = localStorage.getItem("node") || NODES[0];
@@ -369,3 +369,86 @@ async function view_url() {
 	$("#award_textarea").html(url_str);
 	}
 	
+
+async function awards_history() {
+var account = getUrlVars()['account'];
+var get_type = getUrlVars()['type'];
+var limit = getUrlVars()['limit'];
+var initiator = getUrlVars()['initiator'];
+var receiver = getUrlVars()['receiver'];
+var benefactor = getUrlVars()['benefactor'];
+
+if (account) {
+account = account;
+} else {
+account = '';
+window.alert('Ошибка: вы не указали аккаунт. Добавьте к url account=name, где name - логин.');
+}
+var type = '';
+if (get_type === 'receive_award' || get_type === 'benefactor_award' || get_type === 'award') {
+type = get_type;
+} else {
+window.alert('Вы указали несуществующий тип. Варианты: award, receive_award, benefactor_award');
+}
+
+try {
+var from = -1;
+var award_num = 0;
+var awards = [];
+const current_history = await viz.api.getAccountHistoryAsync(account, -1, 1);
+const history_count = current_history[0][0]+1;
+if (history_count < 10000) {
+var lim = history_count;
+} else {
+var lim = 10000;
+}
+while(from) {
+const award_history = await viz.api.getAccountHistoryAsync(account, from, lim);
+    for (const operation of award_history) {
+		const op = operation[1].op;
+if (award_num <= limit) {
+		if (op[0] === type) {
+			award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+		} else if (op[0] === type && op[1].initiator && op[1].initiator === initiator) {
+	award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+} else if (op[0] === type && op[1].receiver && op[1].receiver === receiver) {
+	award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+		} else if (op[0] === type && op[1].benefactor && op[1].benefactor === benefactor) {
+			award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+		} else if (!type && op[1].initiator && op[1].initiator === initiator) {
+			award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+		} else if (!type && op[1].receiver && op[1].receiver === receiver) {
+			award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+		} else if (!type && op[1].benefactor && op[1].benefactor === benefactor) {
+			award_num++;
+awards.push({id: award_num, block: operation[1].block, timestamp: operation[1].timestamp, operation: op[0], body: op[1]});
+		}
+} else {
+break;
+}
+		}
+var percent = award_num/limit;
+percent *= 100;
+		$("body").html(percent.toFixed(2) + '%');
+		if (award_num === limit) break;
+		var count_awards = award_history.length;
+from = award_history[count_awards-1][0]-lim;
+if (from < lim) {
+lim = from;
+}
+		}
+
+$("body").html(JSON.stringify(awards));
+
+} catch(e) {
+console.log(e);
+	$("body").html('{error: ' + e + '}');
+}
+
+}
