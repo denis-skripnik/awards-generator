@@ -1,126 +1,127 @@
 function checkWorkingNode() {
-	const NODES = [
-	 "wss://ws.viz.ropox.tools", 
-	 "wss://viz.lexai.host",
-"wss://solox.world/ws"
-	];
-	let node = localStorage.getItem("node") || NODES[0];
-	const idx = Math.max(NODES.indexOf(node), 0);
-	let checked = 0;
-	const find = (idx) => {
-	 if(idx >= NODES.length) {
-	  idx = 0;
-	 }
-	 if(checked >= NODES.length) {
-	  alert("no working nodes found");
-	  return;
-	 }
-	 node = NODES[idx];
-	 viz.config.set("websocket", node);
-	 viz.api.getDynamicGlobalPropertiesAsync()
-	  .then(props => {
-	   console.log("found working node", node);
-	   localStorage.setItem("node", node);
-	  })
-	  .catch(e => {
-	   console.log("connection error", node, e);
-	   find(idx+1);
-	  });
-	}
-	find(idx);
-   }
+    const NODES = [
+        "wss://ws.viz.ropox.tools",
+        "wss://solox.world/ws",
+        "wss://viz.lexai.host",
+    ];
+    let node = localStorage.getItem("node") || NODES[0];
+    const idx = Math.max(NODES.indexOf(node), 0);
+    let checked = 0;
+    const find = (idx) => {
+        if (idx >= NODES.length) {
+            idx = 0;
+        }
+        if (checked >= NODES.length) {
+            alert("no working nodes found");
+            return;
+        }
+        node = NODES[idx];
+        console.log("check", idx, node);
+        viz.config.set("websocket", node);
+        try {
+            viz.api.stop();
+        } catch(e) {
+        }
+        
+        let timeout = false;
+        let timer = setTimeout(() => {
+            console.log("timeout", NODES[idx])
+            timeout = true;
+            find(idx + 1);
+        }, 3000);
+        viz.api.getDynamicGlobalPropertiesAsync()
+            .then(props => {
+                if(!timeout) {
+                    check = props.head_block_number;
+                    console.log("found working node", node);
+                    localStorage.setItem("node", node);
+                    clearTimeout(timer);
+                }
+            })
+            .catch(e => {
+                console.log("connection error", node, e);
+                find(idx + 1);
+            });
+    }
+    find(idx);
+}
 checkWorkingNode();
 
-
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', function(){
 	if (target_user) {
-		$("#target").val(target_user);
+document.getElementById('target').value = target_user;
 	}
 	
-	$('#target').change(function() {
-		check_login($(this).val());
-	});
-	$("#energy_slider_value").keyup(function() {
-		if ($(this).val().replace(/[^0-9]/g, '') < 101) {
-			$("#slider_energy").slider("value", $(this).val().replace(/[^0-9]/g, ''));
+document.getElementById("target").onchange = function(){
+		check_login(document.getElementById("target").value);
+	}
+	document.getElementById("energy_slider_value").addEventListener("keyup", function () {
+		if (document.getElementById("energy_slider_value").value.replace(/[^0-9]/g, '') < 101) {
+document.getElementById('slider_energy').slider("value", document.getElementById("energy_slider_value").value.replace(/[^0-9]/g, ''));
 		} else {
-			$(this).val("100%");
+			document.getElementById("energy_slider_value").value = '100%';
 			alert("Значение не может превышать 100%")
 		}
 	});		
-	$("#enegry_back").keyup(function() {
-		if ($(this).val().replace(/[^0-9]/g, '') < 101) {
-			if ($("#enegry_back_slider").length > 0) {
-				$("#enegry_back_slider").slider("value", $(this).val().replace(/[^0-9]/g, ''));
-				$("#beneficiaries").val($("#temp_beneficiaries").val() + $("#enegry_back").val().replace(/[^0-9]/g, ''));	
+ document.getElementById("enegry_back").addEventListener("keyup", function () {
+		if (document.getElementById("enegry_back").value.replace(/[^0-9]/g, '') < 101) {
+			if (document.getElementById("enegry_back_slider").length > 0) {
+				document.getElementById("enegry_back_slider").slider("value", $(this).val().replace(/[^0-9]/g, ''));
+				document.getElementById("beneficiaries").value = document.getElementById("temp_beneficiaries").value + document.getElementById("enegry_back").value.replace(/[^0-9]/g, '');
 			} else {
-				$("#beneficiaries").val($("#temp_beneficiaries").val() + $("#enegry_back").val().replace(/[^0-9]/g, ''));				
+document.getElementById("beneficiaries").value = document.getElementById("temp_beneficiaries").value + document.getElementById("enegry_back").value.replace(/[^0-9]/g, '');
 			}
 		} else {
-			$(this).val("100%");
+document.getElementById("enegry_back").value = "100%";
 			alert("Значение не может превышать 100%")
 		}
 	});		
-	$("#temp_energy").keyup(function() {
-		if ($(this).val().replace(/[^0-9]/g, '') > 100) {
-			$(this).val("100%");
+ document.getElementById("temp_energy").addEventListener("keyup", function () {
+		if (document.getElementById("temp_energy").value.replace(/[^0-9]/g, '') > 100) {
+document.getElementById("temp_energy").value = "100%";
 			alert("Значение не может превышать 100%");
 		}
-		$("#send_energy").val($(this).val().replace(/[^0-9]/g, ''));
+		document.getElementById("send_energy").value = document.getElementById("temp_energy").value.replace(/[^0-9]/g, '');
 	});
 	
 	
 	if (localStorage.getItem('login') && localStorage.getItem('PostingKey')) {
 		viz_login = localStorage.getItem('login');
 		posting_key = sjcl.decrypt(viz_login + '_postingKey', localStorage.getItem('PostingKey'));
-		if ($("#temp_beneficiaries").length > 0) {
-			$("#temp_beneficiaries").val($("#temp_beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("temp_beneficiaries").length > 0) {
+			document.getElementById("temp_beneficiaries").value = document.getElementById("temp_beneficiaries").value.replace('user_login', viz_login);
 		}
-		if ($("#beneficiaries").length > 0) {
-			$("#beneficiaries").val($("#beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("beneficiaries").length > 0) {
+document.getElementById("beneficiaries").value = document.getElementById("beneficiaries").value.replace('user_login', viz_login);
 		}
 	} else if (sessionStorage.getItem('login') && sessionStorage.getItem('PostingKey')) {
 		viz_login = sessionStorage.getItem('login');
 		posting_key = sjcl.decrypt(viz_login + '_postingKey', sessionStorage.getItem('PostingKey'));send_award(viz_login, posting_key);
-		if ($("#temp_beneficiaries").length > 0) {
-			$("#temp_beneficiaries").val($("#temp_beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("temp_beneficiaries").length > 0) {
+document.getElementById("temp_beneficiaries").value = document.getElementById("temp_beneficiaries").value.replace('user_login', viz_login);
 		}
-		if ($("#beneficiaries").length > 0) {
-			$("#beneficiaries").val($("#beneficiaries").val().replace('user_login', viz_login));
+		if (document.getElementById("beneficiaries").length > 0) {
+			document.getElementById("beneficiaries").value = document.getElementById("beneficiaries").value.replace('user_login', viz_login);
 		}
 	} else {
-		$("#send_awards_form").css("display","none");
-		if ($("#sortable").length > 0) {
+document.getElementById("send_awards_form").style.display = 'none';
+		if (document.getElementById("sortable").length > 0) {
 		} else {	
-			$("#awards_send_form").append("<form id=\"auth_form\" action=\"index.html\" method=\"GET\"><p class=\"auth_title\"><strong>Пожалуйста авторизируйтесь</strong></p><input type=\"text\" id=\"this_login\" name=\"viz_login\" placeholder=\"Ваш логин\"><br><input type=\"password\" name=\"posting\" id=\"this_posting\" placeholder=\"Приватный постинг ключ\"><br><input type=\"submit\" value=\"Войти\"></form>");
+			document.querySelector('#awards_send_form').appendChild("<form id=\"auth_form\" action=\"index.html\" method=\"GET\"><p class=\"auth_title\"><strong>Пожалуйста авторизируйтесь</strong></p><input type=\"text\" id=\"this_login\" name=\"viz_login\" placeholder=\"Ваш логин\"><br><input type=\"password\" name=\"posting\" id=\"this_posting\" placeholder=\"Приватный постинг ключ\"><br><input type=\"submit\" value=\"Войти\"></form>");
 		}
 	}
-	$("#auth_form").submit(function(e){
+document.getElementById('auth_form').submit = function(e){
 		e.preventDefault();
 		AuthForm();
-	});
-	$("#send_awards_form").submit(function(e){
+	}
+	document.getElementById('send_awards_form').submit = function(e){
 		e.preventDefault();
 		send_award();
-		/*var m_method=$(this).attr('method');
-		var m_action=$(this).attr('action');
-		var m_data=$(this).serialize();
-		$("#back_call_form").css('display','none');
-		$("#back_call_loader").css('display','block');
-		$.ajax({
-			dataType: 'html',
-			type: m_method,
-			url: m_action,
-			data: m_data,
-			success: function(result){
-				$('body').append(result);
-			}
-		});*/
-	});
+	}
 	
 	async function AuthForm() {
-		let login = $('#this_login').val();
-		let posting = $('#this_posting').val();
+		let login = document.getElementById('this_login').value;
+		let posting = document.getElementById('this_posting');
 		
 		if (localStorage.getItem('PostingKey')) {
 			var isPostingKey = sjcl.decrypt(login + '_postingKey', localStorage.getItem('PostingKey'));
@@ -163,8 +164,8 @@ $(document).ready(function() {
 		if (!viz_login && !posting_key) {
 			alert("Не удалось авторизироваться с текущей парой логин/ключ");
 		} else {
-			$("#send_awards_form").css("display","block");
-			$("#auth_form").remove();
+			document.getElementById("send_awards_form").style.display = 'block';
+document.getElementById('auth_form').parentNode.removeChild(document.getElementById('auth_form'));
 		}
 	}
 	/// Функция отправки награды
@@ -190,14 +191,14 @@ $(document).ready(function() {
 		const total_reward_fund = parseFloat(props.total_reward_fund);
 		const total_reward_shares = parseInt(props.total_reward_shares);
 
-		if ($("#send_awards_form input[name=target]").length > 0) {
+		if (document.querySelector('#send_awards_form input[name=target]').length > 0) {
 			var award_target = form.target.value;
 			award_target = award_target.toLowerCase();
 		} else {
 			var award_target = viz_login;
 		}
 
-		if ($("#send_awards_form input[name=payout]").length > 0) {
+		if (document.querySelector('#send_awards_form input[name=payout]').length > 0) {
 			var payout = form.payout.value;
 
 			var award_energy = payout*(total_vesting_fund/total_vesting_shares) / total_reward_fund*(total_reward_shares / 1000000)/effective_vesting_shares;
@@ -213,18 +214,18 @@ $(document).ready(function() {
 				var award_energy = 1;
 			}
 		}
-		if ($("#send_awards_form input[name=custom_sequence]").length > 0) {
+		if (document.querySelector('#send_awards_form input[name=custom_sequence]').length > 0) {
 		var custom_sequence = form.custom_sequence.value;
 		} else {
 			var custom_sequence = 0;
 		}
 		
-		if (($("#send_awards_form input[name=memo]").length > 0) || ($("#send_awards_form textarea[name=memo]").length > 0)) {
+		if ((document.querySelector('#send_awards_form input[name=memo]').length > 0) || (document.querySelector('#send_awards_form textarea[name=memo]').length > 0)) {
 		var memo = decodeURIComponent(form.memo.value);
 		} else {
 			var memo = '';
 		}
-		if ($("#send_awards_form input[name=beneficiaries]").length > 0) {
+		if (document.querySelector('#send_awards_form input[name=beneficiaries]').length > 0) {
 			var beneficiaries = form.beneficiaries.value;
 			var benef = beneficiaries.split(',');
 			var benef_list = [];
@@ -255,15 +256,15 @@ all_award_payout = all_award_payout / 1000000; // количество shares в
 		viz.broadcast.awardAsync(posting_key,viz_login,award_target,award_energy,custom_sequence,memo,benef_list, (err,result) => {
 		if (!err) {
 			viz.api.getAccountsAsync([viz_login], (err, res) => {
-				$('#account_energy').html(res[0].energy/100 + '%');
+document.getElementById("account_energy") = res[0].energy/100 + '%';
 			});
 
-			if ($("#send_awards_form input[name=redirect]").length > 0) {
+			if (document.querySelector('#send_awards_form input[name=redirect]').length > 0) {
 				var redirect = form.redirect.value;
 				window.location.href = redirect;
 			} else {
-				jQuery("#main_award_info").css("display", "block");
-				$('#main_award_info').html(`<h1>Результат:</h1>
+				document.getElementById("main_award_info").style.display = 'block';
+document.getElementById('main_award_info').innerHTML = `<h1>Результат:</h1>
 <p><strong>Вы успешно отправили награду.</strong></p>
 <ul><li>Направление: ${award_target}</li>
 <li>Затрачиваемый процент энергии: ${award_energy/100}%</li>
@@ -275,33 +276,31 @@ all_award_payout = all_award_payout / 1000000; // количество shares в
 <li>Заметка (Memo, описание; назначение может быть любым): ${memo}</li>
 <li>Бенефициары: ${JSON.stringify(beneficiaries)}</li>
 <li>Осталось энергии на момент последней награды: <span id="account_energy"></span></li>
-</ul>`);
+</ul>`;
 			}
 		} else {
 			if (/used_energy <= current_energy/.test(err)) {
-				jQuery("#main_award_info").css("display", "block");
-				$('#main_award_info').html(`<h1>Затрачиваемый вами процент энергии > имеющейся у авторизованного аккаунта</h1>
-<p align="center">Просьба проверить значение energy.</p>`);
+				document.getElementById("main_award_info").style.display = 'block';
+document.getElementById('main_award_info').innerHTML = `<h1>Затрачиваемый вами процент энергии > имеющейся у авторизованного аккаунта</h1>
+<p align="center">Просьба проверить значение energy.</p>`;
 			} else if (/beneficiaries.weight = NaN/.test(err)) {
-				jQuery("#main_award_info").css("display", "block");
-				$('#main_award_info').html(`<h1>Бенефициар есть, а процента, который он получит - нет.</h1>
-<p align="center">Просьба сообщить создателям приложения об этой ошибке.</p>`);
+				document.getElementById("main_award_info").style.display = 'block';
+document.getElementById('main_award_info').innerHTML = `<h1>Бенефициар есть, а процента, который он получит - нет.</h1>
+<p align="center">Просьба сообщить создателям приложения об этой ошибке.</p>`;
 			} else if (/acc != nullptr: Beneficiary/.test(err)) {
-				jQuery("#main_award_info").css("display", "block");
-				$('#main_award_info').html(`<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
-<p align="center">Просьба сообщить об ошибке владельцам приложения.</p>`);
+				document.getElementById("main_award_info").style.display = 'block';
+document.getElementById('main_award_info').innerHTML = `<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
+<p align="center">Просьба сообщить об ошибке владельцам приложения.</p>`;
 			} else if (/is_valid_account_name\(name\): Account name/.test(err)) {
-				jQuery("#main_award_info").css("display", "block");
-				$('#main_award_info').html(`<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
-<p align="center">Просьба сообщить об ошибке создателям приложения.</p>`);
+				document.getElementById("main_award_info").style.display = 'block';
+document.getElementById('main_award_info').innerHTML = `<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
+<p align="center">Просьба сообщить об ошибке создателям приложения.</p>`;
 			} else {
 				window.alert(err);
 			}
 		}
 		});
 	}	
-	
-	//$("#temp_beneficiaries").val();
 	
 	//Получение логина
 	function get_login() {
@@ -321,7 +320,7 @@ all_award_payout = all_award_payout / 1000000; // количество shares в
 		try {
 			const user = await viz.api.getAccountsAsync([login]);
 			if (user.length > 0) {
-				$("#target").val(login);
+document.getElementById("target").value = login;
 			} else {
 				window.alert('Получатель награды не найден. Просьба обратиться к администраторам приложения.');
 			}
