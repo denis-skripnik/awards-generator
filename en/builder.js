@@ -60,7 +60,7 @@ document.getElementById("target").onchange = function(){
 document.getElementById('slider_energy').slider("value", document.getElementById("energy_slider_value").value.replace(/[^0-9]/g, ''));
 		} else {
 			document.getElementById("energy_slider_value").value = '100%';
-			alert("Значение не может превышать 100%")
+			alert("The value cannot exceed 100%")
 		}
 	});		
  document.getElementById("enegry_back").addEventListener("keyup", function () {
@@ -73,13 +73,13 @@ document.getElementById("beneficiaries").value = document.getElementById("temp_b
 			}
 		} else {
 document.getElementById("enegry_back").value = "100%";
-			alert("Значение не может превышать 100%")
+			alert("The value cannot exceed 100%")
 		}
 	});		
  document.getElementById("temp_energy").addEventListener("keyup", function () {
 		if (document.getElementById("temp_energy").value.replace(/[^0-9]/g, '') > 100) {
 document.getElementById("temp_energy").value = "100%";
-			alert("Значение не может превышать 100%");
+			alert("The value cannot exceed 100%");
 		}
 		document.getElementById("send_energy").value = document.getElementById("temp_energy").value.replace(/[^0-9]/g, '');
 	});
@@ -107,7 +107,7 @@ document.getElementById("temp_beneficiaries").value = document.getElementById("t
 document.getElementById("send_awards_form").style.display = 'none';
 		if (document.getElementById("sortable").length > 0) {
 		} else {	
-			document.querySelector('#awards_send_form').appendChild("<form id=\"auth_form\" action=\"index.html\" method=\"GET\"><p class=\"auth_title\"><strong>Пожалуйста авторизируйтесь</strong></p><input type=\"text\" id=\"this_login\" name=\"viz_login\" placeholder=\"Ваш логин\"><br><input type=\"password\" name=\"posting\" id=\"this_posting\" placeholder=\"Приватный постинг ключ\"><br><input type=\"submit\" value=\"Войти\"></form>");
+			document.querySelector('#awards_send_form').appendChild("<form id=\"auth_form\" action=\"index.html\" method=\"GET\"><p class=\"auth_title\"><strong>Please log in</strong></p><input type=\"text\" id=\"this_login\" name=\"viz_login\" placeholder=\"Your login\"><br><input type=\"password\" name=\"posting\" id=\"this_posting\" placeholder=\"Private posting key\"><br><input type=\"submit\" value=\"Login\"></form>");
 		}
 	}
 document.getElementById('auth_form').submit = function(e){
@@ -141,7 +141,7 @@ document.getElementById('auth_form').submit = function(e){
 			posting_public_keys.push(key[0]);
 			}
 			} else {
-			window.alert('Вероятно, аккаунт не существует. Просьба проверить введённый логин.');
+			window.alert('The account probably doesn not exist. Please check the entered login.');
 			}
 			if (posting_public_keys.includes(public_wif)) {
 			localStorage.setItem('login', login);
@@ -152,23 +152,23 @@ document.getElementById('auth_form').submit = function(e){
 				viz_login = login;
 						posting_key = isPostingKey;
 			} else if (account_approve.length === 0) {
-			window.alert('Аккаунт не существует. Пожалуйста, проверьте его');
+			window.alert('Account does not exist. Please check it.');
 			} else {
-				window.alert('Постинг ключ не соответствует пренадлежащему аккаунту.');
+				window.alert('Posting key does not match the account.');
 			}
 					} else {
-			window.alert('Постинг ключ имеет неверный формат. Пожалуйста, попробуйте ещё раз.');
+			window.alert('Posting key is not in the correct format. Please try again.');
 			}
 			
 			
 		if (!viz_login && !posting_key) {
-			alert("Не удалось авторизироваться с текущей парой логин/ключ");
+			alert("Failed to login with current login/key pair");
 		} else {
 			document.getElementById("send_awards_form").style.display = 'block';
 document.getElementById('auth_form').parentNode.removeChild(document.getElementById('auth_form'));
 		}
 	}
-	/// Функция отправки награды
+	/// Award sending function
 	async function send_award(viz_login, posting_key) {
 		if (localStorage.getItem('login') && localStorage.getItem('PostingKey')) {
 			viz_login = localStorage.getItem('login');
@@ -243,13 +243,13 @@ document.getElementById('auth_form').parentNode.removeChild(document.getElementB
 			var benef_list = [];
 		}
 				
-		// Рассчёт стоимости награды:
-var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
-var rshares = parseInt(effective_vesting_shares * 1000000 * award_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
+// Calculation value of reward:
+				var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000);
+var rshares = parseInt(effective_vesting_shares * 1000000 * award_energy / 10000);
+var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price);
 		var beneficiaries_payout = (all_award_payout/100)*beneficiaries_whait;
 		var award_payout = all_award_payout - beneficiaries_payout;
-all_award_payout = all_award_payout / 1000000; // количество shares в десятичном виде float
+all_award_payout = all_award_payout / 1000000;
 		beneficiaries_payout = parseInt(beneficiaries_payout) / 1000000;
 		award_payout = parseInt(award_payout) / 1000000;
 
@@ -264,45 +264,28 @@ document.getElementById("account_energy") = res[0].energy/100 + '%';
 				window.location.href = redirect;
 			} else {
 				document.getElementById("main_award_info").style.display = 'block';
-document.getElementById('main_award_info').innerHTML = `<h1>Результат:</h1>
-<p><strong>Вы успешно отправили награду.</strong></p>
-<ul><li>Направление: ${award_target}</li>
-<li>Затрачиваемый процент энергии: ${award_energy/100}%</li>
-<li>Примерная награда в SHARES:
-общая: ${all_award_payout},
-Бенефициарам: ${beneficiaries_payout},
-Награждаемому: ${award_payout}</li>
-<li>Номер Custom операции (С каждой операцией он увеличивается в get_accounts): ${custom_sequence}</li>
-<li>Заметка (Memo, описание; назначение может быть любым): ${memo}</li>
-<li>Бенефициары: ${JSON.stringify(beneficiaries)}</li>
-<li>Осталось энергии на момент последней награды: <span id="account_energy"></span></li>
+document.getElementById('main_award_info').innerHTML = `<h1>Result:</h1>
+<p><strong>You have successfully sent the award.</strong></p>
+<ul><li>Target: ${award_target}</li>
+<li>Energy Spending Percentage: ${award_energy/100}%</li>
+<li>Approximate award in SHARES:
+general: ${all_award_payout},
+Beneficiaries: ${beneficiaries_payout},
+to the recipient of the award: ${award_payout}</li>
+<li>Custom operation number (With each operation it is incremented in get_accounts): ${custom_sequence}</li>
+<li>Note (Memo, description; destination can be any): ${memo}</li>
+<li>Beneficiaries: ${JSON.stringify(beneficiaries)}</li>
+<li>Energy left at the time of the last award: <span id="account_energy"></span></li>
 </ul>`;
 			}
 		} else {
-			if (/used_energy <= current_energy/.test(err)) {
 				document.getElementById("main_award_info").style.display = 'block';
-document.getElementById('main_award_info').innerHTML = `<h1>Затрачиваемый вами процент энергии > имеющейся у авторизованного аккаунта</h1>
-<p align="center">Просьба проверить значение energy.</p>`;
-			} else if (/beneficiaries.weight = NaN/.test(err)) {
-				document.getElementById("main_award_info").style.display = 'block';
-document.getElementById('main_award_info').innerHTML = `<h1>Бенефициар есть, а процента, который он получит - нет.</h1>
-<p align="center">Просьба сообщить создателям приложения об этой ошибке.</p>`;
-			} else if (/acc != nullptr: Beneficiary/.test(err)) {
-				document.getElementById("main_award_info").style.display = 'block';
-document.getElementById('main_award_info').innerHTML = `<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
-<p align="center">Просьба сообщить об ошибке владельцам приложения.</p>`;
-			} else if (/is_valid_account_name\(name\): Account name/.test(err)) {
-				document.getElementById("main_award_info").style.display = 'block';
-document.getElementById('main_award_info').innerHTML = `<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
-<p align="center">Просьба сообщить об ошибке создателям приложения.</p>`;
-			} else {
-				window.alert(err);
+document.getElementById('main_award_info').innerHTML = `<p>${err}</p>`;
 			}
-		}
 		});
 	}	
 	
-	//Получение логина
+	// Getting login
 	function get_login() {
 		if (localStorage.getItem('login') && localStorage.getItem('PostingKey')) {
 			viz_login = localStorage.getItem('login');
@@ -315,17 +298,17 @@ document.getElementById('main_award_info').innerHTML = `<h1>Аккаунт на�
 		}	
 	}	
 	
-	//Проверка логина
+	// Login verification
 	async function check_login(login) {
 		try {
 			const user = await viz.api.getAccountsAsync([login]);
 			if (user.length > 0) {
 document.getElementById("target").value = login;
 			} else {
-				window.alert('Получатель награды не найден. Просьба обратиться к администраторам приложения.');
+				window.alert('The award recipient is not found. Please contact the application administrators.');
 			}
 		} catch(e) {
-			window.alert('Ошибка: ' + e);
+			window.alert('Error: ' + e);
 		}
 	}	
 });

@@ -84,13 +84,13 @@ if(new_energy>10000){
 	shares1energy = parseInt(shares1energy);
 	shares1energy /= 100;
 
-	$("#now_energy").html('Актуальная энергия пользователя ' + current_user + ': ' + new_energy/100 + '%. 1 SHARES ≈ ' + shares1energy + '% энергии.');
+	$("#now_energy").html('The actual energy of user ' + current_user + ': ' + new_energy/100 + '%. 1 SHARES ≈ ' + shares1energy + '% of energy.');
 
-	var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
-	var rshares = parseInt(effective_vesting_shares * 1000000 * new_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-	var max_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
-	max_payout = max_payout / 1000000; // количество shares в десятичном виде float
-$("#max_payout").html(' (Максимум: ' + max_payout + ')');
+	var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000);
+	var rshares = parseInt(effective_vesting_shares * 1000000 * new_energy / 10000);
+	var max_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price);
+	max_payout = max_payout / 1000000;
+$("#max_payout").html(' (Maximum: ' + max_payout + ')');
 $("#max_payout").click(function () {
 	$('input[name=payout]').val(max_payout);
 
@@ -108,10 +108,10 @@ var input_energy = $("input[name='energy']").val();
 input_energy *= 100;
 input_energy = parseInt(input_energy);
 
-var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
-var rshares = parseInt(effective_vesting_shares * 1000000 * input_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-var change_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
-change_payout = change_payout / 1000000; // количество shares в десятичном виде float
+var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000);
+var rshares = parseInt(effective_vesting_shares * 1000000 * input_energy / 10000);
+var change_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price);
+change_payout = change_payout / 1000000;
 	$("input[name='payout']").val(change_payout);
 });
 $("input[name='payout']").change(function() {
@@ -194,13 +194,13 @@ var beneficiaries_whait = 0;
 		var redirect = getUrlVars()['redirect'];
 		
 
-// Рассчёт стоимости награды:
-var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000); //цена одного viz int
-var rshares = parseInt(effective_vesting_shares * 1000000 * award_energy / 10000); // будущие конкурирующии акции Shares пользователя(смотри словарь) int
-var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price); //количество shares за авард int
+// Calculating award value:
+var viz_price = (total_vesting_shares * 1000000) / (total_vesting_fund * 1000000);
+var rshares = parseInt(effective_vesting_shares * 1000000 * award_energy / 10000);
+var all_award_payout = parseInt(rshares / (total_reward_shares + rshares) *( total_reward_fund * 1000000) * viz_price);
 var beneficiaries_payout = (all_award_payout/100)*beneficiaries_whait;
 var award_payout = all_award_payout - beneficiaries_payout;
-all_award_payout = all_award_payout / 1000000; // количество shares в десятичном виде float
+all_award_payout = all_award_payout / 1000000;
 beneficiaries_payout = parseInt(beneficiaries_payout) / 1000000;
 award_payout = parseInt(award_payout) / 1000000;
 
@@ -214,39 +214,23 @@ $('#account_energy').html(res[0].energy/100 + '%');
 });
 
 	jQuery("#main_award_info").css("display", "block");
-	$('#main_award_info').html(`<h1>Результат:</h1>
-<p><strong>Вы успешно отправили награду.</strong></p>
-<ul><li>Направление: ${award_target}</li>
-<li>Затрачиваемый процент энергии: ${award_energy/100}%</li>
-<li>Примерная награда в SHARES:
-общая: ${all_award_payout},
-Бенефициарам: ${beneficiaries_payout},
-Награждаемому: ${award_payout}</li>
-<li>Номер Custom операции (С каждой операцией он увеличивается в get_accounts): ${custom_sequence}</li>
-<li>Заметка (Memo, описание; назначение может быть любым): ${memo}</li>
-<li>Бенефициары: ${JSON.stringify(beneficiaries)}</li>
-<li>Осталось энергии на момент последней награды: <span id="account_energy"></span></li>
+	$('#main_award_info').html(`<h1>Result:</h1>
+<p><strong>You have successfully sent the award.</strong></p>
+<ul><li>Target: ${award_target}</li>
+<li>Energy Spending Percentage: ${award_energy/100}%</li>
+<li>Approximate award in SHARES:
+general: ${all_award_payout},
+Beneficiaries: ${beneficiaries_payout},
+to the recipient of the award: ${award_payout}</li>
+<li>Custom operation number (With each operation it is incremented in get_accounts): ${custom_sequence}</li>
+<li>Note (Memo, description; destination can be any): ${memo}</li>
+<li>Beneficiaries: ${JSON.stringify(beneficiaries)}</li>
+<li>Energy left at the time of the last award: <span id="account_energy"></span></li>
 </ul>`);
 }
 } else {
-	if (/used_energy <= current_energy/.test(err)) {
 		jQuery("#main_award_info").css("display", "block");
-		$('#main_award_info').html(`<h1>Указанный вами процент энергии > имеющейся у авторизованного аккаунта</h1>
-<p align="center">Просьба проверить значение energy в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
-	} else if (/beneficiaries.weight = NaN/.test(err)) {
-		jQuery("#main_award_info").css("display", "block");
-		$('#main_award_info').html(`<h1>Вы указали бенефициара, но не указали процент, который он получит</h1>
-<p align="center">Просьба проверить значение после двоеточия в beneficiaries (адресная строка) или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
-	} else if (/acc != nullptr: Beneficiary/.test(err)) {
-		jQuery("#main_award_info").css("display", "block");
-		$('#main_award_info').html(`<h1>1 или несколько аккаунтов бенефициаров не существует.</h1>
-<p align="center">Просьба проверить значение beneficiaries в адресной строке или ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
-	} else if (/is_valid_account_name\(name\): Account name/.test(err)) {
-		jQuery("#main_award_info").css("display", "block");
-		$('#main_award_info').html(`<h1>Аккаунт награждаемого или бенефициара не существует.</h1>
-<p align="center">Просьба проверить значение target и beneficiaries (Первую часть до двоеточия) в адресной строке.  Также можно ввести новое в <a href="https://liveblogs.space/awards/form.html" target="_blank">форме</a>.</p>`);
-} else {
-window.alert(err);
+		$('#main_award_info').html(`<p>${err}</p>`);
 }
 }
 });
@@ -274,7 +258,7 @@ for (key of account_approve[0].posting.key_auths) {
 posting_public_keys.push(key[0]);
 }
 } else {
-window.alert('Вероятно, аккаунт не существует. Просьба проверить введённый логин.');
+window.alert('Your account probably doesn't exist. Please check your login details.');
 }
 if (posting_public_keys.includes(public_wif)) {
 	var isSavePosting = document.getElementById('isSavePosting');
@@ -289,12 +273,12 @@ localStorage.setItem('login', login);
 	viz_login = login;
 			posting_key = isPostingKey;
 } else if (account_approve.length === 0) {
-window.alert('Аккаунт не существует. Пожалуйста, проверьте его');
+window.alert('Account does not exist. Please check it.');
 } else {
-	window.alert('Постинг ключ не соответствует пренадлежащему аккаунту.');
+	window.alert('Posting key does not match the account.');
 }
 		} else {
-window.alert('Постинг ключ имеет неверный формат. Пожалуйста, попробуйте ещё раз.');
+window.alert('Posting key has incorrect format. Please try again.');
 }
 
 if (!viz_login && !posting_key) {
@@ -303,7 +287,7 @@ if (!viz_login && !posting_key) {
 } else {
 		$('#unblock_form').css("display", "none");
 	$('#delete_posting_key').css("display", "block");
-	jQuery("#delete_posting_key").html('<p align="center"><a onclick="localStorage.removeItem(\'login\'\); localStorage.removeItem(\'PostingKey\'\);     location.reload();">Выйти</a></p>');
+	jQuery("#delete_posting_key").html('<p align="center"><a onclick="localStorage.removeItem(\'login\'\); localStorage.removeItem(\'PostingKey\'\);     location.reload();">Logout</a></p>');
 if (IsPageSend === true) {
 	send_award(viz_login, posting_key);
 } else {
@@ -317,7 +301,7 @@ if (IsPageSend === true) {
 			var weightsum = 0;
 			
 			function updateText() {
-				document.getElementById('out').innerHTML = 'Итоговый список: ' + benif;
+				document.getElementById('out').innerHTML = 'Final list: ' + benif;
 			}
 			
 			function add() {
@@ -326,10 +310,10 @@ if (IsPageSend === true) {
 			
 				if (weightsum + per > maxweightsum) {
 					if (weightsum === 0) {
-						alert("Процент превышает " + maxweightsum + "%.");
+						alert("The percentage exceeds " + maxweightsum + "%.");
 					} else {
-						alert("Сумма процентов превышает " + maxweightsum + "%." +
-							" Вы можете ввести максимум " + (maxweightsum - weightsum) + "%.");
+						alert("The sum of the percentages exceeds " + maxweightsum + "%." +
+							" You can enter a maximum of " + (maxweightsum - weightsum) + "%.");
 					}
 				} else {
 						benif += nick + ':' + per + ',';
@@ -345,7 +329,7 @@ if (IsPageSend === true) {
 
 			updateText();
 
-// Для furm.html:
+// For furm.html:
 async function awardFormSend() {
 	benif = benif.replace(/,\s*$/, "");
 	var form = document.getElementById('award_user_form');
@@ -363,13 +347,13 @@ url_str = url_str.replace(/&\s*$/, "");
 window.location.href = url_str;
 }
 
-// Для url.html:
+// For url.html:
 async function view_url() {
 	benif = benif.replace(/,\s*$/, "");
 	var form = document.getElementById('AwardUrlForm');
 	var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: form.memo.value, beneficiaries: benif, redirect: form.redirect.value};
 	$("#award_url").css("display", "block");
-	$("#award_url").html(`<h2>Сформированный url награды:</h2>
+	$("#award_url").html(`<h2>Reward url generated:</h2>
 	<textarea id="award_textarea"></textarea>`);
 	
 	var url_str = '';
@@ -397,13 +381,13 @@ if (account) {
 account = account;
 } else {
 account = '';
-window.alert('Ошибка: вы не указали аккаунт. Добавьте к url account=name, где name - логин.');
+window.alert('Error: you didn't enter an account. Add account=name to the url, where name is the login.');
 }
 var type = '';
 if (get_type === 'receive_award' || get_type === 'benefactor_award' || get_type === 'award') {
 type = get_type;
 } else {
-window.alert('Вы указали несуществующий тип. Варианты: award, receive_award, benefactor_award');
+window.alert('You specified a non-existent type. variants: award, receive_award, benefactor_award');
 }
 
 try {

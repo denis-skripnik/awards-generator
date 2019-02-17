@@ -49,6 +49,7 @@ First, the name of the parameter is displayed here, as in Url, and then - as in 
     8. Convenience: all errors are in Russian, logins can be entered in any register (There will be no errors), Moreover, even if you leave all the fields empty, i.e.  url will be index.html, you reward yourself with 0.01% of energy.  Of course, if authorized.  This allows you to use the awards generator as flexible as possible: selecting only the fields / parameters that are needed.  For example, index.html? Energy = 10 will give you 10% reward;
     9. The possibility of using as a means of payment from the issue.  This is achieved by adding the ability to enter the amount of the reward in the parameters / fields, as well as viewing the amount that was the result.
     10. Open Source: You can modify the project as you wish.
+11. Two versions: Russian and English (Folders ru and en).
 
 ## What is next?
 1. Design order.
