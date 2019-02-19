@@ -1,6 +1,6 @@
 function checkWorkingNode() {
     const NODES = [
-        "wss://ws.viz.ropox.tools",
+        "wss://ws.viz.ropox.app",
         "wss://solox.world/ws",
         "wss://viz.lexai.host",
     ];

@@ -1,6 +1,6 @@
 function checkWorkingNode() {
     const NODES = [
-        "wss://ws.viz.ropox.tools",
+        "wss://ws.viz.ropox.app",
         "wss://solox.world/ws",
         "wss://viz.lexai.host",
     ];
@@ -55,6 +55,7 @@ document.getElementById('target').value = target_user;
 document.getElementById("target").onchange = function(){
 		check_login(document.getElementById("target").value);
 	}
+
 	document.getElementById("energy_slider_value").addEventListener("keyup", function () {
 		if (document.getElementById("energy_slider_value").value.replace(/[^0-9]/g, '') < 101) {
 document.getElementById('slider_energy').slider("value", document.getElementById("energy_slider_value").value.replace(/[^0-9]/g, ''));
