@@ -370,7 +370,11 @@ async function view_url() {
 	var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: form.memo.value, beneficiaries: benif, redirect: form.redirect.value};
 	$("#award_url").css("display", "block");
 	$("#award_url").html(`<h2>Сформированный url награды:</h2>
-	<textarea id="award_textarea"></textarea>`);
+	<textarea id="award_textarea"></textarea>
+	<h2>QR-код</h2>
+	<div id="qrcode"></div>
+	<hr>
+	<p><strong><a id="qrcode_link">Скачать</a></strong></p>`);
 	
 	var url_str = '';
 	url_str += 'https://liveblogs.space/awards?';
@@ -382,7 +386,12 @@ async function view_url() {
 	url_str = url_str.replace(/&\s*$/, "");
 	
 	$("#award_textarea").html(url_str);
-	}
+	$('#qrcode').qrcode({width: 200,height: 200,text: url_str});
+var div_qr = $('#qrcode').html();
+var canvas = document.querySelector('canvas');
+var dataURL = canvas.toDataURL();
+    document.getElementById('qrcode_link').href = dataURL;
+}
 	
 
 async function awards_history() {

@@ -232,7 +232,6 @@ to the recipient of the award: ${award_payout}</li>
 		jQuery("#main_award_info").css("display", "block");
 		$('#main_award_info').html(`<p>${err}</p>`);
 }
-}
 });
 }
 
@@ -258,7 +257,7 @@ for (key of account_approve[0].posting.key_auths) {
 posting_public_keys.push(key[0]);
 }
 } else {
-window.alert('Your account probably doesn't exist. Please check your login details.');
+window.alert('Your account probably does not exist. Please check your login details.');
 }
 if (posting_public_keys.includes(public_wif)) {
 	var isSavePosting = document.getElementById('isSavePosting');
@@ -354,7 +353,11 @@ async function view_url() {
 	var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: form.memo.value, beneficiaries: benif, redirect: form.redirect.value};
 	$("#award_url").css("display", "block");
 	$("#award_url").html(`<h2>Reward url generated:</h2>
-	<textarea id="award_textarea"></textarea>`);
+	<textarea id="award_textarea"></textarea>
+<h2>QR-code</h2>
+<div id="qrcode"></div>
+<hr>
+<p><strong><a id="qrcode_link">Download</a></strong></p>`);
 	
 	var url_str = '';
 	url_str += 'https://liveblogs.space/awards?';
@@ -366,6 +369,11 @@ async function view_url() {
 	url_str = url_str.replace(/&\s*$/, "");
 	
 	$("#award_textarea").html(url_str);
+	$('#qrcode').qrcode({width: 200,height: 200,text: url_str});
+var div_qr = $('#qrcode').html();
+var canvas = document.querySelector('canvas');
+var dataURL = canvas.toDataURL();
+    document.getElementById('qrcode_link').href = dataURL;
 	}
 	
 
@@ -381,7 +389,7 @@ if (account) {
 account = account;
 } else {
 account = '';
-window.alert('Error: you didn't enter an account. Add account=name to the url, where name is the login.');
+window.alert('Error: you did not enter an account. Add account=name to the url, where name is the login.');
 }
 var type = '';
 if (get_type === 'receive_award' || get_type === 'benefactor_award' || get_type === 'award') {

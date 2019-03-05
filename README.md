@@ -15,7 +15,7 @@ In the awards address generator, everything is very similar to the form, but the
 This function will allow you to decide what parameters of the award that will contain. 
 For example, in memo you can place JSON with the name of the application, its id, which changes once a day, as well as the author and permlink post. 
 The possibility of convenient addition of beneficiaries is made.
-
+Is created qr-code with the url of the reward.
     3. Generate award address manually.  To begin with, these are the standard get options.  That is, the address is: index.html? Target = login & energy = 0.7 & custom_sequence = 0 & memo = thank you for everything & beneficiaries = denis-skripnik: 10, on1x: 25
 But you can write like this:? Target = login And you will reward your login account with 0.01% energy  .  All other parameters will be either 0 or empty.  About what each parameter means, in the next section.
 
