@@ -6,12 +6,10 @@ return r;
     }
 var data_url = stroka();
 
-var fn = 'yandex.ru';
-addEvent(document.getElementById('click_ru'), 'click', fn);
-
 var lang = window.navigator.language || navigator.userLanguage
-if ( lang  === "en") {
+console.log(lang);
+if ( lang  === "en-US") {
 	window.location.href = 'en/' + data_url;
-} else if ( lang  === "ru") {
+} else if ( lang  === "ru-RU") {
 	window.location.href = 'ru/' + data_url;
 }
