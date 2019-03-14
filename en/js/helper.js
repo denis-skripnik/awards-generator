@@ -128,7 +128,9 @@ $("input[name='payout']").change(function() {
 }
 
 async function send_award(viz_login, posting_key) {
-	const [acc] = await viz.api.getAccountsAsync([viz_login]);
+let q = window.confirm('do you really want to reward?');
+if (q === true) {
+const [acc] = await viz.api.getAccountsAsync([viz_login]);
 	const props = await viz.api.getDynamicGlobalPropertiesAsync();
 
 	const vesting_shares = parseFloat(acc.vesting_shares);
@@ -233,6 +235,7 @@ to the recipient of the award: ${award_payout}</li>
 		$('#main_award_info').html(`<p>${err}</p>`);
 }
 });
+}
 }
 
 async function awardAuth(IsPageSend) {
