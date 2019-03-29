@@ -354,16 +354,15 @@ if (IsPageSend === true) {
 async function awardFormSend() {
 	benif = benif.replace(/,\s*$/, "");
 	var form = document.getElementById('award_user_form');
-var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: form.memo.value, beneficiaries: benif, redirect: form.redirect.value};
+var data = {target: form.target.value, energy: form.energy.value, custom_sequence: form.custom_sequence.value, memo: encodeURIComponent(form.memo.value), beneficiaries: benif, redirect: form.redirect.value};
 
 var url_str = '';
-url_str += 'https://liveblogs.space/awards?';
+url_str += './?';
 for (key in data) {
 if (data[key]) {
 	url_str += key + '=' + data[key] + '&';
 }
 }
-url_str = url_str.replace(/&\s*$/, "");
 
 window.location.href = url_str;
 }
