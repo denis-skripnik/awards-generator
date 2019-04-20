@@ -1,8 +1,7 @@
 function checkWorkingNode() {
     const NODES = [
-        "wss://ws.viz.ropox.app",
         "wss://solox.world/ws",
-        "wss://viz.lexai.host",
+        "wss://vizlite.lexai.host/",
     ];
     let node = localStorage.getItem("node") || NODES[0];
     const idx = Math.max(NODES.indexOf(node), 0);
@@ -256,7 +255,7 @@ const account_approve = await viz.api.getAccountsAsync([login]);
 const public_wif = viz.auth.wifToPublic(isPostingKey);
 let posting_public_keys = [];
 if (account_approve.length > 0) {
-for (key of account_approve[0].posting.key_auths) {
+for (key of account_approve[0].regular_authority.key_auths) {
 posting_public_keys.push(key[0]);
 }
 } else {
