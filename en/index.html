@@ -34,14 +34,26 @@ posting_key = sjcl.decrypt(viz_login + '_postingKey', localStorage.getItem('Post
     $('#unblock_form').css("display", "none");
 	$('#delete_posting_key').css("display", "block");
 	jQuery("#delete_posting_key").html('<p align="center"><a onclick="localStorage.removeItem(\'login\'\); localStorage.removeItem(\'PostingKey\'\);     location.reload();">Logout</a></p>');
+if (!$.isEmptyObject(getUrlVars())) {
 	send_award(viz_login, posting_key);
+} else {
+	jQuery("#main_award_info").css("display", "block");
+$('#main_award_info').html(`<h1>Please enter the details</h1>
+<p>You must specify your login and other parameters in the <a href="form.html">rewards form</a></p>`);
+}
 } else if (sessionStorage.getItem('login') && sessionStorage.getItem('PostingKey')) {
 viz_login = sessionStorage.getItem('login');
 posting_key = sjcl.decrypt(viz_login + '_postingKey', sessionStorage.getItem('PostingKey'));
     $('#unblock_form').css("display", "none");
 	$('#delete_posting_key').css("display", "block");
 	jQuery("#delete_posting_key").html('<p align="center"><a onclick="sessionStorage.removeItem(\'login\'\); sessionStorage.removeItem(\'PostingKey\'\);     location.reload();">Logout</a></p>');
+if (!$.isEmptyObject(getUrlVars())) {
 	send_award(viz_login, posting_key);
+} else {
+	jQuery("#main_award_info").css("display", "block");
+$('#main_award_info').html(`<h1>Пожалуйста, укажите данные</h1>
+<p>Для награждения необходимо указать логин и другие параметры. Это можно сделать в <a href="form.html">форме</a></p>`);
+}
 } else {
 	$('#delete_posting_key').css("display", "none");
 				$('#unblock_form').css("display", "block");
