@@ -19,7 +19,7 @@ Is created qr-code with the url of the reward.
     3. Generate award address manually.  To begin with, these are the standard get options.  That is, the address is: index.html? Target = login & energy = 0.7 & custom_sequence = 0 & memo = thank you for everything & beneficiaries = denis-skripnik: 10, on1x: 25
 But you can write like this:? Target = login And you will reward your login account with 0.01% energy  .  All other parameters will be either 0 or empty.  About what each parameter means, in the next section.
 
-    4. You can create a form on builder.html (https://liveblogs.space/awards/builder.html) and place it in your application, which is based on html + js.  The form will be autonomous, i.e.  does not redirect to the page index.html awards-generator, but sends the award through the script builder.js. 
+    4. You can create a form on builder.html (https://viz.dpos.space/awards/en/builder.html) and place it in your application, which is based on html + js.  The form will be autonomous, i.e.  does not redirect to the page index.html awards-generator, but sends the award through the script builder.js. 
 To work in your application (on the site, in the extension) you need to connect viz.min.js and sjcl.min.js (the last one is to encrypt and decrypt the award key posting).  When using the slider, i.e.  the slider to select the percentage of energy or the percentage of deduction to the recipient needs to connect another 1 script, but its code is registered as a result of generation. 
 The first multi-line field displays an example of creating a variable target_user with the default value that you specified in the section on the recipient of the award.  Instead, it is necessary to transfer to the script of the form the login of the person to whom the reward will go, for example, VIZ the login of the author of the page on which you are going to reward or the gateway login that allows you to reward users who do not have a VIZ account.
 
@@ -55,8 +55,8 @@ First, the name of the parameter is displayed here, as in Url, and then - as in 
 1. Design order.
 
 ## That is all 
-You can use the award-generator using the https://liveblogs.space/awards
-Form: https://liveblogs.space/awards/form.html
+You can use the award-generator using the https://viz.dpos.space/awards
+Form: https://viz.dpos.space/awards/en/form.html
 url are: index.html? Target = denis-skripnik & energy = 10
 
 ***
