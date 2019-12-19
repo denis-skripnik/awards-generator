@@ -127,7 +127,8 @@ $("input[name='payout']").change(function() {
 }
 
 async function send_award(viz_login, posting_key) {
-let q = window.confirm('Вы действительно хотите отправить награду?');
+if (viz_login !== getUrlVars()['target']) {
+	let q = window.confirm('Вы действительно хотите отправить награду?');
 if (q === true) {
 const [acc] = await viz.api.getAccountsAsync([viz_login]);
 	const props = await viz.api.getDynamicGlobalPropertiesAsync();
@@ -144,9 +145,7 @@ const effective_vesting_shares = vesting_shares + received_vesting_shares - dele
 	if (getUrlVars()['target']) {
 		var award_target = getUrlVars()['target'];
 award_target = award_target.toLowerCase();
-	} else {
-		var award_target = viz_login;
-	}
+}
 
 		if (getUrlVars()['payout']) {
 			var payout = getUrlVars()['payout'];
@@ -253,6 +252,9 @@ window.alert(err);
 });
 } else {
 window.alert('Вы отказались отправлять награду.');
+}
+} else {
+	window.alert('Награждать себя нельзя. Это бесполезно для Viz.');
 }
 }
 
