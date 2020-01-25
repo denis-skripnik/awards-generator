@@ -39,17 +39,16 @@ First, the name of the parameter is displayed here, as in Url, and then - as in 
 - redirect.  In the form of "Link to redirect after a successful award (optional)."  Where to redirect after a successful award.  By default, after a successful reward is sent, information is displayed with the parameters of the reward.  But if you want to redirect the reward to some url, for example, sending reward parameters to the database, you can specify it here.  "redirect" refers to the functionality of the service, and not to viz.broadcast.award.
 
 ## Main features:
-    1. Locality: you can download and use.
-    2. Authorization without sending to the server: Posting the key is not transmitted anywhere, but is stored in your browser, and then at your will (If you wish, you can enter your login and key each time);
-    3. Flexibility: it is provided with award functionality, and also a redirect;
-    4. Easy integration into applications: it is enough to know the url format.
-    5. The ability to use as a rewarding other users, and to send awards to himself.
-    6. The percentages are indicated as you usually write them: not 7529, but 75.29;
-    7. The service itself searches for a working public node, connects to it and remembers.  If it becomes idle, looking for a new one and also remembers ...
-    8. Convenience: all errors are in Russian, logins can be entered in any register (There will be no errors), Moreover, even if you leave all the fields empty, i.e.  url will be index.html, you reward yourself with 0.01% of energy.  Of course, if authorized.  This allows you to use the awards generator as flexible as possible: selecting only the fields / parameters that are needed.  For example, index.html? Energy = 10 will give you 10% reward;
-    9. The possibility of using as a means of payment from the issue.  This is achieved by adding the ability to enter the amount of the reward in the parameters / fields, as well as viewing the amount that was the result.
-    10. Open Source: You can modify the project as you wish.
-11. Two versions: Russian and English (Folders ru and en).
+1. Locality: you can download and use.
+2. Authorization without sending to the server: Posting the key is not transmitted anywhere, but is stored in your browser, and then at your will (If you wish, you can enter your login and key each time);
+3. Flexibility: it is provided with award functionality, and also a redirect;
+4. Easy integration into applications: it is enough to know the url format.
+5. The percentages are indicated as you usually write them: not 7529, but 75.29;
+6. The service itself searches for a working public node, connects to it and remembers.  If it becomes idle, looking for a new one and also remembers ...
+7. Convenience: all errors are in Russian, logins can be entered in any register (There will be no errors), Moreover, even if you leave all the fields empty, i.e.  url will be index.html, you reward yourself with 0.01% of energy.  Of course, if authorized.  This allows you to use the awards generator as flexible as possible: selecting only the fields / parameters that are needed.  For example, index.html? Energy = 10 will give you 10% reward;
+8. The possibility of using as a means of payment from the issue.  This is achieved by adding the ability to enter the amount of the reward in the parameters / fields, as well as viewing the amount that was the result.
+9. Open Source: You can modify the project as you wish.
+10. Two versions: Russian and English (Folders ru and en).
 
 ## What is next?
 1. Design order.
