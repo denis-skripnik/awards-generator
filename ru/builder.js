@@ -1,7 +1,7 @@
 function checkWorkingNode() {
 	const NODES = [
-	 "wss://ws.viz.ropox.app",
-	 "wss://vizlite.lexai.host/",
+	 "wss://viz.lexa.host/ws",
+"wss://viz-node.dpos.space/ws",
 "wss://solox.world/ws"
 	];
 	let node = localStorage.getItem("node") || NODES[0];
